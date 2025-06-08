@@ -255,7 +255,7 @@ We used the **Live Server** VS Code extension for convenience. Without it, the d
 
 ## 🧩 Video Explanation
 
-![[moveousml.mp4]]
+https://youtu.be/jwF9O5bOdQ8
 
 ---
 
