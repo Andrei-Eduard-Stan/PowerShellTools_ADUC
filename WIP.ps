@@ -13,4 +13,5 @@ if (-not (Test-Path $logPath)) {
 # Write each error to the file
 foreach ($appError in $appErrors) {
     $appError | Out-File -Append $logFile
+    # $appErrors | Select-Object TimeGenerated, EntryType, Source, Message | Export-Csv $logFile -NoTypeInformation
 }
