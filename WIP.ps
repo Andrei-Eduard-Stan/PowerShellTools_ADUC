@@ -15,6 +15,34 @@ foreach ($appError in $appErrors) {
     $appError | Out-File -Append $logFile
     # $appErrors | Select-Object TimeGenerated, EntryType, Source, Message | Export-Csv $logFile -NoTypeInformation
 }
+#
+
+$services = Get-CimInstance Win32_Service | Where-Object { $_.StartMode -eq "Manual" -and $_.State -ne "Running" }
+$services | Out-File "C:\Temp\Manual_NotRunning.txt"
+
+$services = Get-Service | WhereObject { $_.Startup -eq "Manual" -and $_.Status "Stopped"}
+$services | Out-File -Append $servicelog
+
+Import-Module ActiveDirectory
+$itusers = Get-ADUser -Filter * -Properties Department | Where-Object { $_.Department -eq "IT" }
+$itusers | Select-Object Name, Department
+
+$logPath = "C:\Logs\Today\"
+if (-not (Test-Path $logPath)) {
+    New-Item -Path $logPath -ItemType Directory
+}
+
+Get-EventLog -LogName System -EntryType Warning -Newest 15 |
+Out-File "$logPath\Logs_Today.txt"
+
+$spooler = Get-Service -Name Spooler
+if ($spooler.Status -eq "Stopped") {
+    Start-Service -Name Spooler
+    "Spooler restarted at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File "C:\Temp\SpoolerLog.txt" -Append
+}
+
+
+
 # -------------------------------------------------------------------------------------------------------------------
 
 $logPath = "C:\Temp"
