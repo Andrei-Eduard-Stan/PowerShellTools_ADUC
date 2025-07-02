@@ -1,0 +1,16 @@
+$logPath = "C:\Temp\Logs"
+$logFile = "$logPath\AppErrors.txt"
+
+# Get latest 20 Application-level errors
+$appErrors = Get-EventLog -LogName Application -EntryType Error -Newest 20
+
+# If folder doesn't exist, create it
+if (-not (Test-Path $logPath)) {
+    New-Item -Path $logPath -ItemType Directory
+    Write-Host "$logPath created"
+}
+
+# Write each error to the file
+foreach ($appError in $appErrors) {
+    $appError | Out-File -Append $logFile
+}
