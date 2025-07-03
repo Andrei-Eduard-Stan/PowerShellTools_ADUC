@@ -9,6 +9,30 @@ if (-not (Test-Path $logPath)) {
     New-Item -Path $logPath -ItemType Directory
     Write-Host "$logPath created"
 }
+#
+Import-Module ActiveDirectory
+
+$logPath = "C:\Reports"
+$timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm"
+$logFile = "$logPath\FinanceUsers_$timestamp.csv"
+$errorLog = "$logPath\ErrorLog.txt"
+
+if (-not (Test-Path $logPath)) {
+    try {
+        New-Item -Path $logPath -ItemType Directory
+    } catch {
+        $_ | Out-File $errorLog -Append
+    }
+}
+
+$targetOU = "OU=Staff,DC=corp,DC=company,DC=com"
+
+try {
+    $targetUsers = Get-ADUser -SearchBase $targetOU -Filter "Department -eq 'Finance'" -Properties DisplayName, SamAccountName, Department
+    $targetUsers | Select-Object Name, SamAccountName, Department | Export-Csv $logFile -NoTypeInformation
+} catch {
+    $_ | Out-File $errorLog -Append
+}
 
 #
 $logPath = "C:\Temp"
