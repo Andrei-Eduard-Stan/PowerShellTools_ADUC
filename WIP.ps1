@@ -9,7 +9,7 @@ if (-not (Test-Path $logPath)) {
     New-Item -Path $logPath -ItemType Directory
     Write-Host "$logPath created"
 }
-#
+#---
 Import-Module ActiveDirectory
 
 $logPath = "C:\Reports"
@@ -34,7 +34,7 @@ try {
     $_ | Out-File $errorLog -Append
 }
 
-#
+#---
 $logPath = "C:\Temp"
 $logFile = "${logPath}\StoppedAutoServices.csv"
 
