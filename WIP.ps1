@@ -59,6 +59,25 @@ $services | Export-Csv -Path $csvFile -NoTypeInformation
 
 # -------------------------------------------------------------------------------------------------------------------
 
+$logPath = "C:\Logs\Today"
+if (-not (Test-Path $logPath)) {
+    New-Item -Path $logPath -ItemType Directory
+}
+
+$timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm"
+$logFile = "${logPath}\DiskErrors_$timestamp.txt"
+
+$errors = Get-EventLog -LogName System -EntryType Error -Newest 50
+
+foreach ($error in $errors) {
+    if ($error.Source -eq "Disk") {
+        $error | Out-File $logFile -Append
+    }
+}
+
+
+# -------------------------------------------------------------------------------------------------------------------
+
 Import-Module ActiveDirectory
 
 New-ADComputer -Name "L4961" -Path "CN=Computers,DC=dukufst,DC=local" -SamAccountName "L4961"
