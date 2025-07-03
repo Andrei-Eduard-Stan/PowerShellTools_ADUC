@@ -10,6 +10,22 @@ if (-not (Test-Path $logPath)) {
     Write-Host "$logPath created"
 }
 
+#
+$logPath = "C:\Temp"
+$logFile = "${logPath}\StoppedAutoServices.csv"
+
+if (-not (Test-Path $logPath)) {
+    New-Item -Path $logPath -ItemType Directory
+}
+
+$stoppedServices = Get-CimInstance -ClassName Win32_Service | Where-Object {
+    $_.State -eq "Stopped" -and $_.StartMode -eq "Auto"
+}
+
+$stoppedServices | Select-Object DisplayName, State, StartMode | Export-Csv $logFile -NoTypeInformation
+
+#
+
 # Write each error to the file
 foreach ($appError in $appErrors) {
     $appError | Out-File -Append $logFile
