@@ -56,7 +56,41 @@ foreach ($appError in $appErrors) {
     # $appErrors | Select-Object TimeGenerated, EntryType, Source, Message | Export-Csv $logFile -NoTypeInformation
 }
 #
+Import-Module ActiveDirectory
 
+$logPath="C:\Audit"
+$logError="C:\Temp"
+$errorFile="${logError}\errorlog.txt"
+$logFile="${logPath}\InfraUsers.csv"
+$targetOU="OU=IT,DC=corp,DC=company,DC=com"
+
+
+if (-not (Test-Path $logPath)){
+
+New-Item -Path $logPath -ItemType Directory
+
+}
+
+
+
+if (-not (Test-Path $logError)){
+
+New-Item -Path $logError -ItemType Directory
+
+}
+
+
+try{
+$targetUsers=Get-ADUser -SearchBase $targetOU -Filter "Department -eq  'Infrastructure'"  -Properties Name, SamAccountName, Department
+
+$targetUsers | Select-Object Name, SamAccountName, Department |Export-Csv $logFile -NoTypeInformation 
+
+}catch{
+
+$_ | Out-File $errorFile -Append
+
+}
+#
 $services = Get-CimInstance Win32_Service | Where-Object { $_.StartMode -eq "Manual" -and $_.State -ne "Running" }
 $services | Out-File "C:\Temp\Manual_NotRunning.txt"
 
