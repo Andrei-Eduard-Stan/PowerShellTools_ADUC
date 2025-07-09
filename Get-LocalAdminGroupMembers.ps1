@@ -23,6 +23,10 @@ function Get-LocalAdminGroupMembers {
             $members = Get-LocalGroupMember -Group "Administrators"
             $members | Select-Object Name, ObjectClass, PrincipalSource | Export-Csv $logFile -NoTypeInformation
         }
+        # 🔹 Invoke Method if allowed
+        #Invoke-Command -ComputerName $targetComputer -ScriptBlock {
+        #    Get-LocalGroupMember -Group "Administrators"
+        #}
         # 🔹 CASE 2: Remote computer — use CIM session to query WMI
         else {
             # Create a CIM session to the remote computer
