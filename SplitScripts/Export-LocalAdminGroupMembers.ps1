@@ -1,4 +1,4 @@
-function Get-LocalAdminGroupMembers {
+function Export-LocalAdminGroupMembers {
     [CmdletBinding()]
     param (
         [string]$ComputerName = $env:COMPUTERNAME
@@ -61,10 +61,10 @@ function Get-LocalAdminGroupMembers {
             Remove-CimSession $session
         }
 
-        Write-Host "✔ Admin group exported to $logFile"
+        Write-Host "Admin group exported to $logFile"
     }
     catch {
         "[$(Get-Date)] Failed on $ComputerName - $($_.Exception.Message)" | Out-File $logError -Append
-        Write-Host "⚠ An error occurred — see $logError"
+        Write-Host "An error occurred see $logError"
     }
 }
