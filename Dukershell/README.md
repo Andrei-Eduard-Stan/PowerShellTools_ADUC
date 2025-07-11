@@ -41,6 +41,14 @@ Verify the module is available:
 ```powershell
 Get-Module -ListAvailable Dukershell
 ```
+
+> Note: if the module is not available, it might be because it is not trusted, at which point you simply have to run the lines below to allow it to bypass the Execution Policy:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+Import-Module Dukershell
+```
+
 Usage from a local path (without install)
 ```powershell
 Import-Module "C:\path\to\Dukershell\Dukershell.psm1"
