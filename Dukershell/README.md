@@ -24,7 +24,7 @@ It provides auditing, monitoring, and recovery functions for administrators and 
 1. Clone or download this repository:
 
    ```powershell
-   git clone https://github.com/yourusername/Dukershell.git
+   git clone https://github.com/Andrei-Eduard-Stan/PowerShellTools_ADUC/tree/main/Dukershell.git
    ```
 Copy the Dukershell folder (containing Dukershell.psd1 and Dukershell.psm1) to one of the paths listed in `$env:PSModulePath`, for example:
 
